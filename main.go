@@ -13,8 +13,7 @@ func main()  {
 	r := mux.NewRouter()
 	r.HandleFunc("/", web).Name("index")
 
-
-	r.PathPrefix("/index").Handler(http.StripPrefix("/index", http.FileServer(http.Dir(conf.StaticPath))))
+	r.PathPrefix("/web").Handler(http.StripPrefix("/web", http.FileServer(http.Dir(conf.StaticPath))))
 
 	s := r.PathPrefix("/line").Subrouter()
 	s.HandleFunc("/getlines", api.Getlines)
@@ -23,7 +22,6 @@ func main()  {
 	s.HandleFunc("/speedmod", api.SpeedMod)
 	s.HandleFunc("/applayline", api.AppalyLine)
 	http.ListenAndServe(":3000", r)
-
 }
 
 func web(w http.ResponseWriter, r *http.Request)  {
