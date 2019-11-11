@@ -1,6 +1,7 @@
 package util
 
 import (
+	"github.com/yangyouwei/newrouter/conf"
 	"github.com/yangyouwei/newrouter/models"
 	"strings"
 )
@@ -112,21 +113,88 @@ func ChSpeedMod(m string,conf LineConf)  {
 }
 
 func FullSpeed(l LineConf)  {
-	
+	//关闭dnsmasq
+	Shellout("/etc/init.d/dnsmasq stop",conf.Workdir)
+	//启动 restart redirect
+	Shellout("/etc/init.d/redirect restart",conf.Workdir)
+	//清理防火墙
+	Stopspeed()
+	//加载防火墙规则
+	iptables := strings.Split(IptablesFull,"\n")
+	for _,i := range iptables {
+		if strings.Contains(i,"$ssserver") {
+			c := strings.Replace(i,"$ssserver",Port.Ipaddr,-1)
+			Shellout(c,conf.Workdir)
+		}else if strings.Contains(i,"${UDPPort}") {
+			c := strings.Replace(i,"${UDPPort}",Port.UDPPort,-1)
+			Shellout(c,conf.Workdir)
+		} else if strings.Contains(i,"${TCPPort}") {
+			c := strings.Replace(i,"${TCPPort}",Port.TCPPort,-1)
+			Shellout(c,conf.Workdir)
+		}else {
+			Shellout(i,conf.Workdir)
+		}
+	}
 }
 
 func MultiSpeed(l LineConf)  {
-	
+	//关闭dnsmasq
+	Shellout("/etc/init.d/dnsmasq stop",conf.Workdir)
+	//启动 restart redirect
+	Shellout("/etc/init.d/redirect restart",conf.Workdir)
+	//清理防火墙
+	Stopspeed()
+	//加载防火墙规则
+	iptables := strings.Split(IptablesFull,"\n")
+	for _,i := range iptables {
+		if strings.Contains(i,"$ssserver") {
+			c := strings.Replace(i,"$ssserver",Port.Ipaddr,-1)
+			Shellout(c,conf.Workdir)
+		}else if strings.Contains(i,"${UDPPort}") {
+			c := strings.Replace(i,"${UDPPort}",Port.UDPPort,-1)
+			Shellout(c,conf.Workdir)
+		} else if strings.Contains(i,"${TCPPort}") {
+			c := strings.Replace(i,"${TCPPort}",Port.TCPPort,-1)
+			Shellout(c,conf.Workdir)
+		}else {
+			Shellout(i,conf.Workdir)
+		}
+	}
 }
 
 func DomesticSpeed(l LineConf)  {
-
+	//关闭dnsmasq
+	Shellout("/etc/init.d/dnsmasq stop",conf.Workdir)
+	//启动 restart redirect
+	Shellout("/etc/init.d/redirect restart",conf.Workdir)
+	//清理防火墙
+	Stopspeed()
+	//加载防火墙规则
+	iptables := strings.Split(IptablesFull,"\n")
+	for _,i := range iptables {
+		if strings.Contains(i,"$ssserver") {
+			c := strings.Replace(i,"$ssserver",Port.Ipaddr,-1)
+			Shellout(c,conf.Workdir)
+		}else if strings.Contains(i,"${UDPPort}") {
+			c := strings.Replace(i,"${UDPPort}",Port.UDPPort,-1)
+			Shellout(c,conf.Workdir)
+		} else if strings.Contains(i,"${TCPPort}") {
+			c := strings.Replace(i,"${TCPPort}",Port.TCPPort,-1)
+			Shellout(c,conf.Workdir)
+		}else {
+			Shellout(i,conf.Workdir)
+		}
+	}
 }
 
 func Stopspeed()  {
+	//关闭 restart redirect
+	Shellout("/etc/init.d/redirect stop",conf.Workdir)
+	//启动dnsmasq
+	Shellout("/etc/init.d/dnsmasq start",conf.Workdir)
 	//重启防火墙
-	Shellout("/etc/init.d/firewall restart","/")
+	Shellout("/etc/init.d/firewall restart",conf.Workdir)
 	//删除默认路由
-	Shellout("ip rule  del fwmark 0x1/0x1","/")
-	Shellout("ip route del local 0.0.0.0/0 dev lo table 100","/")
+	Shellout("ip rule  del fwmark 0x1/0x1",conf.Workdir)
+	Shellout("ip route del local 0.0.0.0/0 dev lo table 100",conf.Workdir)
 }
