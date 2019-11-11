@@ -1,13 +1,23 @@
 package util
 
+import (
+	"github.com/yangyouwei/newrouter/models"
+	"strings"
+)
+
 type LineConf struct {
 	Ipaddr string
 	TCPPort string
 	UDPPort string
 }
+var Port LineConf
 
-var IptablesFull string = `ip rule add fwmark 0x01/0x01 table 100
-ip route add local 0.0.0.0/0 dev lo table 100
+func init()  {
+	Port.getpoart()
+}
+
+var IptablesFull string = `/usr/sbin/ip rule add fwmark 0x01/0x01 table 100
+/usr/sbin/ip route add local 0.0.0.0/0 dev lo table 100
 /usr/sbin/iptables -t mangle -N SS-UDP
 /usr/sbin/iptables -t mangle -A SS-UDP -d $ssserver -j RETURN
 /usr/sbin/iptables -t mangle -A SS-UDP -d 192.168/16 -j RETURN
@@ -37,7 +47,7 @@ ip route add local 0.0.0.0/0 dev lo table 100
 /usr/sbin/iptables -t nat -A PREROUTING -p tcp -j SS-TCP`
 
 var IpatablesMulti string = `ip rule add fwmark 0x01/0x01 table 100
-ip route add local 0.0.0.0/0 dev lo table 100
+/usr/sbin/ip route add local 0.0.0.0/0 dev lo table 100
 /usr/sbin/ptables -t mangle -N SS-UDP
 /usr/sbin/ptables -t mangle -A SS-UDP -d $ssserver -j RETURN
 /usr/sbin/ptables -t mangle -A SS-UDP -p udp -j TPROXY --tproxy-mark 0x01/0x01 --on-port ${UDPPort}
@@ -48,7 +58,7 @@ ip route add local 0.0.0.0/0 dev lo table 100
 /usr/sbin/ptables -t nat -A PREROUTING -p tcp -m set --match-set foreign dst -j SS-TCP`
 
 var IptablesDomestic string = `ip rule add fwmark 0x01/0x01 table 100
-ip route add local 0.0.0.0/0 dev lo table 100
+/usr/sbin/ip route add local 0.0.0.0/0 dev lo table 100
 /usr/sbin/iptables -t mangle -N SS-UDP
 /usr/sbin/iptables -t mangle -A SS-UDP -d $ssserver -j RETURN
 /usr/sbin/iptables -t mangle -A SS-UDP -m set --match-set domestic dst -j RETURN
@@ -79,6 +89,15 @@ ip route add local 0.0.0.0/0 dev lo table 100
 /usr/sbin/iptables -t nat -A OUTPUT -p tcp -j SS-TCP
 /usr/sbin/iptables -t nat -A PREROUTING -p tcp -j SS-TCP`
 
+func (p *LineConf)getpoart()  {
+	i := models.Line{}
+	i.GetUseLine()
+	ip := strings.Split(i.Ipaddr,":")
+	p.Ipaddr = ip[1]
+	p.TCPPort = "8001"
+	p.UDPPort = "8001"
+}
+
 func ChSpeedMod(m string,conf LineConf)  {
 	switch  {
 	case m == "fullspeed":
@@ -105,5 +124,9 @@ func DomesticSpeed(l LineConf)  {
 }
 
 func Stopspeed()  {
-
+	//重启防火墙
+	Shellout("/etc/init.d/firewall restart","/")
+	//删除默认路由
+	Shellout("ip rule  del fwmark 0x1/0x1","/")
+	Shellout("ip route del local 0.0.0.0/0 dev lo table 100","/")
 }

@@ -4,12 +4,62 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/yangyouwei/newrouter/api"
 	"github.com/yangyouwei/newrouter/conf"
+	"github.com/yangyouwei/newrouter/models"
+	"github.com/yangyouwei/newrouter/util"
 	"html/template"
 	"log"
 	"net/http"
 )
 
+var system models.Sysstr
+
+func init()  {
+	//判断加速模式。如果是不加速，直接退出
+	system.GetSYSTEM()
+	speedmode := system.SpeedMod
+	workdir := conf.Workdir
+	switch {
+	case speedmode == "full":
+		//停止dnsmasq
+		util.Shellout("/etc/init.d/dnsmasq stop",workdir)
+		//启动redirect
+		util.Shellout("/etc/init.d/redirect start",workdir)
+		//加载防火墙
+		util.Shellout("",workdir)
+	case speedmode == "foreigen":
+		//停止dnsmasq
+		util.Shellout("/etc/init.d/dnsmasq stop",workdir)
+		//启动redirect
+		util.Shellout("/etc/init.d/redirect start",workdir)
+		//加载防火墙
+		util.Shellout("",workdir)
+	case speedmode == "multicontry":
+		//停止dnsmasq
+		util.Shellout("/etc/init.d/dnsmasq stop",workdir)
+		//启动redirect
+		util.Shellout("/etc/init.d/redirect start",workdir)
+		//加载防火墙
+		util.Shellout("",workdir)
+	case speedmode == "stopspeed":
+		//清空防火墙
+		util.Shellout("",workdir)
+		//关闭redirect
+		util.Shellout("/etc/init.d/redirect stop",workdir)
+		//重启dnsmasq
+		util.Shellout("/etc/init.d/dnsmasq start",workdir)
+	default:
+		//清空防火墙
+		util.Stopspeed()
+		//关闭redirect
+		util.Shellout("/etc/init.d/redirect stop",workdir)
+		//重启dnsmasq
+		util.Shellout("/etc/init.d/dnsmasq start",workdir)
+	}
+}
+
 func main()  {
+
+
 	r := mux.NewRouter()
 	r.HandleFunc("/", web).Name("index")
 
