@@ -1,7 +1,7 @@
 package conf
 
 var (
-	Workdir string = "/redirect/webserver"
+	Workdir string = "/webserver/mana"
 	LinesConfig string = "/webwever/mana/lines.json"
 	StaticPath string = "/webserver/mana/web"
 	IpsetIPdir string = "/webserver/mana/ipdir"
