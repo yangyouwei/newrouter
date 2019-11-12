@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/gorilla/mux"
 	"github.com/yangyouwei/newrouter/api"
 	"github.com/yangyouwei/newrouter/conf"
@@ -17,9 +18,11 @@ func init()  {
 	//判断加速模式。如果是不加速，直接退出
 	system.GetSYSTEM()
 	speedmode := system.SpeedMod
+	//fmt.Println(speedmode)
 	workdir := conf.Workdir
 	switch {
 	case speedmode == "full":
+		fmt.Println("mode is full")
 		//停止dnsmasq
 		util.Shellout("/etc/init.d/dnsmasq stop",workdir)
 		//启动redirect
@@ -27,6 +30,7 @@ func init()  {
 		//加载防火墙
 		util.Shellout("",workdir)
 	case speedmode == "foreigen":
+		fmt.Println("mode is foreigen")
 		//停止dnsmasq
 		util.Shellout("/etc/init.d/dnsmasq stop",workdir)
 		//启动redirect
@@ -34,6 +38,7 @@ func init()  {
 		//加载防火墙
 		util.Shellout("",workdir)
 	case speedmode == "multicontry":
+		fmt.Println("mode is multicontry")
 		//停止dnsmasq
 		util.Shellout("/etc/init.d/dnsmasq stop",workdir)
 		//启动redirect
@@ -41,6 +46,7 @@ func init()  {
 		//加载防火墙
 		util.Shellout("",workdir)
 	case speedmode == "stopspeed":
+		fmt.Println("mode is stopspeed")
 		//清空防火墙
 		util.Shellout("",workdir)
 		//关闭redirect
@@ -48,6 +54,7 @@ func init()  {
 		//重启dnsmasq
 		util.Shellout("/etc/init.d/dnsmasq start",workdir)
 	default:
+		fmt.Println("mode is stopspeed")
 		//清空防火墙
 		util.Stopspeed()
 		//关闭redirect

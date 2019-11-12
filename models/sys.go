@@ -14,7 +14,7 @@ type Sysstr struct {
 
 
 func (system *Sysstr)GetSYSTEM(){
-	err := db.SqlDB.QueryRow("SELECT * FROM system WHERE rowid=?", 0).Scan(&system.Contry, &system.SpeedMod,&system.GetchontryUrl,&system.GetLineUrl)
+	err := db.SqlDB.QueryRow("SELECT * FROM system WHERE rowid=?", 1).Scan(&system.Contry, &system.SpeedMod,&system.GetchontryUrl,&system.GetLineUrl)
 	if err != nil {
 		fmt.Println(err)
 	}
