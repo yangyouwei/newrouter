@@ -96,7 +96,7 @@ func (p *LineConf)getpoart()  {
 	i := models.Line{}
 	i.GetUseLine()
 	ip := strings.Split(i.Ipaddr,":")
-	p.Ipaddr = ip[1]
+	p.Ipaddr = ip[0]
 	p.TCPPort = "8001"
 	p.UDPPort = "8001"
 }
