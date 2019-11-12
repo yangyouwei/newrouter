@@ -26,11 +26,11 @@ func init()  {
 		//停止dnsmasq
 		err, standout, standerro := util.Shellout("/etc/init.d/dnsmasq stop",workdir)
 		if err != nil {
-			fmt.Println(err)
+			fmt.Println("util.shellout error: ",err)
 		}else if standout != "" {
-			 fmt.Println(standout)
+			 fmt.Println("exec stand output: "+standout)
 		}else if standerro != "" {
-			 fmt.Println(standerro)
+			 fmt.Println("exec stand error output "+standerro)
 		}
 		//启动redirect
 		err1, standout1, standerro1 := util.Shellout("/etc/init.d/redirect start",workdir)
