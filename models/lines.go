@@ -1,8 +1,13 @@
 package models
 
 import (
+	"bufio"
+	"github.com/yangyouwei/newrouter/conf"
 	"github.com/yangyouwei/newrouter/db"
+	"io"
 	"log"
+	"os"
+	"strings"
 )
 
 type Line struct {
@@ -66,6 +71,24 @@ func (l *Line) DelLine() (ra int64, err error) {
 	return
 }
 
-func (l *Line)GetUseLine()  {
+func (l *Line)GetUseLine() {
+	f, err := os.Open(conf.RDIRCONF)
+	if err != nil {
+		panic(err)
+	}
+	defer f.Close()
 
+	rd := bufio.NewReader(f)
+	for {
+		ls, err := rd.ReadString('\n') //以'\n'为结束符读入一行
+
+		if err != nil || io.EOF == err {
+			break
+		}
+		if strings.HasPrefix(string(ls), "Servers=") {
+			ipaddport := strings.Split(ls,"=")
+			ip := strings.Replace(ipaddport[1], "\n", "", -1)
+			l.Ipaddr = ip
+		}
+	}
 }
