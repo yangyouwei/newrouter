@@ -24,6 +24,7 @@ func init()  {
 	case speedmode == "full":
 		fmt.Println("mode is full")
 		//停止dnsmasq
+		fmt.Println("stop dnsmasq")
 		err, standout, standerro := util.Shellout("/etc/init.d/dnsmasq stop",workdir)
 		if err != nil {
 			fmt.Println("util.shellout error: ",err)
@@ -33,6 +34,7 @@ func init()  {
 			 fmt.Println("exec stand error output "+standerro)
 		}
 		//启动redirect
+		fmt.Println("start redirect")
 		err1, standout1, standerro1 := util.Shellout("/etc/init.d/redirect start",workdir)
 		if err1 != nil {
 			fmt.Println(err1)
@@ -42,6 +44,7 @@ func init()  {
 			fmt.Println(standerro1)
 		}
 		//加载防火墙
+		fmt.Println("loading iptables")
 		err2, standout2, standerro2 := util.Shellout("",workdir)
 		if err2 != nil {
 			fmt.Println(err2)
