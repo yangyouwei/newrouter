@@ -55,7 +55,7 @@ func init()  {
 }
 
 func main()  {
-
+	var serverport string = "3000"
 
 	r := mux.NewRouter()
 	r.HandleFunc("/", web).Name("index")
@@ -68,7 +68,8 @@ func main()  {
 	s.HandleFunc("/modline", api.ModLineconf)
 	s.HandleFunc("/speedmod", api.SpeedMod)
 	s.HandleFunc("/applayline", api.AppalyLine)
-	http.ListenAndServe(":3000", r)
+	fmt.Println("server is listening on 127.0.0.1 "+serverport)
+	http.ListenAndServe(":"+serverport, r)
 }
 
 func web(w http.ResponseWriter, r *http.Request)  {
