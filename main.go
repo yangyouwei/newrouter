@@ -19,7 +19,6 @@ func init()  {
 	system.GetSYSTEM()
 	speedmode := system.SpeedMod
 	//fmt.Println(speedmode)
-	workdir := conf.Workdir
 	switch {
 	case speedmode == "full":
 		fmt.Println("mode is full")
