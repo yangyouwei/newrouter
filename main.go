@@ -45,14 +45,7 @@ func init()  {
 		}
 		//加载防火墙
 		fmt.Println("loading iptables")
-		err2, standout2, standerro2 := util.Shellout("",workdir)
-		if err2 != nil {
-			fmt.Println(err2)
-		}else if standout2 != "" {
-			fmt.Println(standout2)
-		}else if standerro2 != "" {
-			fmt.Println(standerro2)
-		}
+		util.ChSpeedMod("fullspeed",util.Port)
 	case speedmode == "foreigen":
 		fmt.Println("mode is foreigen")
 		//停止dnsmasq
@@ -60,7 +53,8 @@ func init()  {
 		//启动redirect
 		util.Shellout("/etc/init.d/redirect start",workdir)
 		//加载防火墙
-		util.Shellout("",workdir)
+		fmt.Println("loading iptables")
+		util.ChSpeedMod("domsticspeed",util.Port)
 	case speedmode == "multicontry":
 		fmt.Println("mode is multicontry")
 		//停止dnsmasq
@@ -68,11 +62,12 @@ func init()  {
 		//启动redirect
 		util.Shellout("/etc/init.d/redirect start",workdir)
 		//加载防火墙
-		util.Shellout("",workdir)
+		fmt.Println("loading iptables")
+		util.ChSpeedMod("multispeed",util.Port)
 	case speedmode == "stopspeed":
 		fmt.Println("mode is stopspeed")
 		//清空防火墙
-		util.Shellout("",workdir)
+		util.Stopspeed()
 		//关闭redirect
 		util.Shellout("/etc/init.d/redirect stop",workdir)
 		//重启dnsmasq
