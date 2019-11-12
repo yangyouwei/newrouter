@@ -24,11 +24,32 @@ func init()  {
 	case speedmode == "full":
 		fmt.Println("mode is full")
 		//停止dnsmasq
-		util.Shellout("/etc/init.d/dnsmasq stop",workdir)
+		err, standout, standerro := util.Shellout("/etc/init.d/dnsmasq stop",workdir)
+		if err != nil {
+			fmt.Println(err)
+		}else if standout != "" {
+			 fmt.Println(standout)
+		}else if standerro != "" {
+			 fmt.Println(standerro)
+		}
 		//启动redirect
-		util.Shellout("/etc/init.d/redirect start",workdir)
+		err1, standout1, standerro1 := util.Shellout("/etc/init.d/redirect start",workdir)
+		if err1 != nil {
+			fmt.Println(err1)
+		}else if standout1 != "" {
+			fmt.Println(standout1)
+		}else if standerro1 != "" {
+			fmt.Println(standerro1)
+		}
 		//加载防火墙
-		util.Shellout("",workdir)
+		err2, standout2, standerro2 := util.Shellout("",workdir)
+		if err2 != nil {
+			fmt.Println(err2)
+		}else if standout2 != "" {
+			fmt.Println(standout2)
+		}else if standerro2 != "" {
+			fmt.Println(standerro2)
+		}
 	case speedmode == "foreigen":
 		fmt.Println("mode is foreigen")
 		//停止dnsmasq
