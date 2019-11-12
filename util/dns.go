@@ -16,10 +16,10 @@ func SwitchRedirect(s bool)  {
 }
 
 func StartRedict()  {
-	Shellout(RedirectCommand+"restart","/")
 	Shellout(DnsModcommand+"0","/")
 	Shellout(UciCommit,"/")
 	Shellout(DnsmasqCommand,"/")
+	Shellout(RedirectCommand+"restart","/")
 }
 
 func StopRedirect()  {

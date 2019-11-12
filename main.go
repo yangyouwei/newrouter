@@ -24,43 +24,20 @@ func init()  {
 	case speedmode == "full":
 		fmt.Println("mode is full")
 		//停止dnsmasq
-		fmt.Println("stop dnsmasq")
-		err, standout, standerro := util.Shellout("/etc/init.d/dnsmasq stop",workdir)
-		if err != nil {
-			fmt.Println("util.shellout error: ",err)
-		}else if standout != "" {
-			 fmt.Println("exec stand output: "+standout)
-		}else if standerro != "" {
-			 fmt.Println("exec stand error output "+standerro)
-		}
-		//启动redirect
-		fmt.Println("start redirect")
-		err1, standout1, standerro1 := util.Shellout("/etc/init.d/redirect start",workdir)
-		if err1 != nil {
-			fmt.Println(err1)
-		}else if standout1 != "" {
-			fmt.Println(standout1)
-		}else if standerro1 != "" {
-			fmt.Println(standerro1)
-		}
+		util.SwitchRedirect(true)
 		//加载防火墙
 		fmt.Println("loading iptables")
 		util.ChSpeedMod("fullspeed",util.Port)
 	case speedmode == "foreigen":
 		fmt.Println("mode is foreigen")
-		//停止dnsmasq
-		util.Shellout("/etc/init.d/dnsmasq stop",workdir)
-		//启动redirect
-		util.Shellout("/etc/init.d/redirect start",workdir)
+		util.SwitchRedirect(true)
 		//加载防火墙
 		fmt.Println("loading iptables")
 		util.ChSpeedMod("domsticspeed",util.Port)
 	case speedmode == "multicontry":
 		fmt.Println("mode is multicontry")
 		//停止dnsmasq
-		util.Shellout("/etc/init.d/dnsmasq stop",workdir)
-		//启动redirect
-		util.Shellout("/etc/init.d/redirect start",workdir)
+		util.SwitchRedirect(true)
 		//加载防火墙
 		fmt.Println("loading iptables")
 		util.ChSpeedMod("multispeed",util.Port)
@@ -68,18 +45,12 @@ func init()  {
 		fmt.Println("mode is stopspeed")
 		//清空防火墙
 		util.Stopspeed()
-		//关闭redirect
-		util.Shellout("/etc/init.d/redirect stop",workdir)
-		//重启dnsmasq
-		util.Shellout("/etc/init.d/dnsmasq start",workdir)
+		util.SwitchRedirect(false)
 	default:
 		fmt.Println("mode is stopspeed")
 		//清空防火墙
 		util.Stopspeed()
-		//关闭redirect
-		util.Shellout("/etc/init.d/redirect stop",workdir)
-		//重启dnsmasq
-		util.Shellout("/etc/init.d/dnsmasq start",workdir)
+		util.SwitchRedirect(false)
 	}
 	fmt.Println("finish init")
 }
