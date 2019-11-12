@@ -1,6 +1,7 @@
 package util
 
 import (
+	"fmt"
 	"github.com/yangyouwei/newrouter/conf"
 	"github.com/yangyouwei/newrouter/models"
 	"strings"
@@ -15,6 +16,7 @@ var Port LineConf
 
 func init()  {
 	Port.getpoart()
+	fmt.Println(Port)
 }
 
 var IptablesFull string = `/usr/sbin/ip rule add fwmark 0x01/0x01 table 100
@@ -113,11 +115,7 @@ func ChSpeedMod(m string,conf LineConf)  {
 }
 
 func FullSpeed(l LineConf)  {
-	//关闭dnsmasq
-	Shellout("/etc/init.d/dnsmasq stop",conf.Workdir)
-	//启动 restart redirect
-	Shellout("/etc/init.d/redirect restart",conf.Workdir)
-	//清理防火墙
+	SwitchRedirect(true)
 	Stopspeed()
 	//加载防火墙规则
 	iptables := strings.Split(IptablesFull,"\n")
@@ -138,14 +136,11 @@ func FullSpeed(l LineConf)  {
 }
 
 func MultiSpeed(l LineConf)  {
-	//关闭dnsmasq
-	Shellout("/etc/init.d/dnsmasq stop",conf.Workdir)
-	//启动 restart redirect
-	Shellout("/etc/init.d/redirect restart",conf.Workdir)
+	SwitchRedirect(true)
 	//清理防火墙
 	Stopspeed()
 	//加载防火墙规则
-	iptables := strings.Split(IptablesFull,"\n")
+	iptables := strings.Split(IpatablesMulti,"\n")
 	for _,i := range iptables {
 		if strings.Contains(i,"$ssserver") {
 			c := strings.Replace(i,"$ssserver",Port.Ipaddr,-1)
@@ -163,14 +158,11 @@ func MultiSpeed(l LineConf)  {
 }
 
 func DomesticSpeed(l LineConf)  {
-	//关闭dnsmasq
-	Shellout("/etc/init.d/dnsmasq stop",conf.Workdir)
-	//启动 restart redirect
-	Shellout("/etc/init.d/redirect restart",conf.Workdir)
+	SwitchRedirect(true)
 	//清理防火墙
 	Stopspeed()
 	//加载防火墙规则
-	iptables := strings.Split(IptablesFull,"\n")
+	iptables := strings.Split(IptablesDomestic,"\n")
 	for _,i := range iptables {
 		if strings.Contains(i,"$ssserver") {
 			c := strings.Replace(i,"$ssserver",Port.Ipaddr,-1)
@@ -188,10 +180,7 @@ func DomesticSpeed(l LineConf)  {
 }
 
 func Stopspeed()  {
-	//关闭 restart redirect
-	Shellout("/etc/init.d/redirect stop",conf.Workdir)
-	//启动dnsmasq
-	Shellout("/etc/init.d/dnsmasq start",conf.Workdir)
+	SwitchRedirect(false)
 	//重启防火墙
 	Shellout("/etc/init.d/firewall restart",conf.Workdir)
 	//删除默认路由
