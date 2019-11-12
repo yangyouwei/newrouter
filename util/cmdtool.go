@@ -5,7 +5,7 @@ import (
 	"os/exec"
 )
 
-const ShellToUse = "sh"
+const ShellToUse = "/usr/bin/sh"
 
 func Shellout(command string,pwdir string) (error, string, string) {
 	var stdout bytes.Buffer
