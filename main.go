@@ -83,6 +83,7 @@ func init()  {
 		//重启dnsmasq
 		util.Shellout("/etc/init.d/dnsmasq start",workdir)
 	}
+	fmt.Println("finish init")
 }
 
 func main()  {
