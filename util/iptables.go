@@ -7,13 +7,14 @@ import (
 )
 
 type LineConf struct {
-	Ipaddr string
+	Ipaddr  string
 	TCPPort string
 	UDPPort string
 }
+
 var Port LineConf
 
-func init()  {
+func init() {
 	Port.getpoart()
 }
 
@@ -90,17 +91,17 @@ var IptablesDomestic string = `ip rule add fwmark 0x01/0x01 table 100
 /usr/sbin/iptables -t nat -A OUTPUT -p tcp -j SS-TCP
 /usr/sbin/iptables -t nat -A PREROUTING -p tcp -j SS-TCP`
 
-func (p *LineConf)getpoart()  {
+func (p *LineConf) getpoart() {
 	i := models.Line{}
 	i.GetUseLine()
-	ip := strings.Split(i.Ipaddr,":")
+	ip := strings.Split(i.Ipaddr, ":")
 	p.Ipaddr = ip[0]
 	p.TCPPort = "8001"
 	p.UDPPort = "8001"
 }
 
-func ChSpeedMod(m string)  {
-	switch  m{
+func ChSpeedMod(m string) {
+	switch m {
 	case "fullspeed":
 		FullSpeed()
 	case "multispeed":
@@ -112,72 +113,72 @@ func ChSpeedMod(m string)  {
 	}
 }
 
-func FullSpeed()  {
+func FullSpeed() {
 	Stopspeed()
 	//加载防火墙规则
-	iptables := strings.Split(IptablesFull,"\n")
-	for _,i := range iptables {
-		if strings.Contains(i,"$ssserver") {
-			c := strings.Replace(i,"$ssserver",Port.Ipaddr,-1)
-			Shellout(c,conf.Workdir)
-		}else if strings.Contains(i,"${UDPPort}") {
-			c := strings.Replace(i,"${UDPPort}",Port.UDPPort,-1)
-			Shellout(c,conf.Workdir)
-		} else if strings.Contains(i,"${TCPPort}") {
-			c := strings.Replace(i,"${TCPPort}",Port.TCPPort,-1)
-			Shellout(c,conf.Workdir)
-		}else {
-			Shellout(i,conf.Workdir)
+	iptables := strings.Split(IptablesFull, "\n")
+	for _, i := range iptables {
+		if strings.Contains(i, "$ssserver") {
+			c := strings.Replace(i, "$ssserver", Port.Ipaddr, -1)
+			Shellout(c, conf.Workdir)
+		} else if strings.Contains(i, "${UDPPort}") {
+			c := strings.Replace(i, "${UDPPort}", Port.UDPPort, -1)
+			Shellout(c, conf.Workdir)
+		} else if strings.Contains(i, "${TCPPort}") {
+			c := strings.Replace(i, "${TCPPort}", Port.TCPPort, -1)
+			Shellout(c, conf.Workdir)
+		} else {
+			Shellout(i, conf.Workdir)
 		}
 	}
 }
 
-func MultiSpeed()  {
+func MultiSpeed() {
 	//清理防火墙
 	Stopspeed()
 	//加载防火墙规则
-	iptables := strings.Split(IpatablesMulti,"\n")
-	for _,i := range iptables {
-		if strings.Contains(i,"$ssserver") {
-			c := strings.Replace(i,"$ssserver",Port.Ipaddr,-1)
-			Shellout(c,conf.Workdir)
-		}else if strings.Contains(i,"${UDPPort}") {
-			c := strings.Replace(i,"${UDPPort}",Port.UDPPort,-1)
-			Shellout(c,conf.Workdir)
-		} else if strings.Contains(i,"${TCPPort}") {
-			c := strings.Replace(i,"${TCPPort}",Port.TCPPort,-1)
-			Shellout(c,conf.Workdir)
-		}else {
-			Shellout(i,conf.Workdir)
+	iptables := strings.Split(IpatablesMulti, "\n")
+	for _, i := range iptables {
+		if strings.Contains(i, "$ssserver") {
+			c := strings.Replace(i, "$ssserver", Port.Ipaddr, -1)
+			Shellout(c, conf.Workdir)
+		} else if strings.Contains(i, "${UDPPort}") {
+			c := strings.Replace(i, "${UDPPort}", Port.UDPPort, -1)
+			Shellout(c, conf.Workdir)
+		} else if strings.Contains(i, "${TCPPort}") {
+			c := strings.Replace(i, "${TCPPort}", Port.TCPPort, -1)
+			Shellout(c, conf.Workdir)
+		} else {
+			Shellout(i, conf.Workdir)
 		}
 	}
 }
 
-func DomesticSpeed()  {
+func DomesticSpeed() {
 	//清理防火墙
 	Stopspeed()
 	//加载防火墙规则
-	iptables := strings.Split(IptablesDomestic,"\n")
-	for _,i := range iptables {
-		if strings.Contains(i,"$ssserver") {
-			c := strings.Replace(i,"$ssserver",Port.Ipaddr,-1)
-			Shellout(c,conf.Workdir)
-		}else if strings.Contains(i,"${UDPPort}") {
-			c := strings.Replace(i,"${UDPPort}",Port.UDPPort,-1)
-			Shellout(c,conf.Workdir)
-		} else if strings.Contains(i,"${TCPPort}") {
-			c := strings.Replace(i,"${TCPPort}",Port.TCPPort,-1)
-			Shellout(c,conf.Workdir)
-		}else {
-			Shellout(i,conf.Workdir)
+	iptables := strings.Split(IptablesDomestic, "\n")
+	for _, i := range iptables {
+		if strings.Contains(i, "$ssserver") {
+			c := strings.Replace(i, "$ssserver", Port.Ipaddr, -1)
+			Shellout(c, conf.Workdir)
+		} else if strings.Contains(i, "${UDPPort}") {
+			c := strings.Replace(i, "${UDPPort}", Port.UDPPort, -1)
+			Shellout(c, conf.Workdir)
+		} else if strings.Contains(i, "${TCPPort}") {
+			c := strings.Replace(i, "${TCPPort}", Port.TCPPort, -1)
+			Shellout(c, conf.Workdir)
+		} else {
+			Shellout(i, conf.Workdir)
 		}
 	}
 }
 
-func Stopspeed()  {
+func Stopspeed() {
 	//重启防火墙
-	Shellout("/etc/init.d/firewall restart",conf.Workdir)
+	Shellout("/etc/init.d/firewall restart", conf.Workdir)
 	//删除默认路由
-	Shellout("ip rule  del fwmark 0x1/0x1",conf.Workdir)
-	Shellout("ip route del local 0.0.0.0/0 dev lo table 100",conf.Workdir)
+	Shellout("ip rule  del fwmark 0x1/0x1", conf.Workdir)
+	Shellout("ip route del local 0.0.0.0/0 dev lo table 100", conf.Workdir)
 }
