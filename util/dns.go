@@ -19,12 +19,16 @@ func SwitchRedirect(s bool)  {
 
 func StartRedict()  {
 	a,b,c := Shellout(DnsModcommand+"0","/")
+	fmt.Println(DnsModcommand+"0")
 	fmt.Println(a,b,c)
 	a,b,c = Shellout(UciCommit,"/")
+	fmt.Println(UciCommit)
 	fmt.Println(a,b,c)
 	a,b,c = Shellout(DnsmasqCommand,"/")
+	fmt.Println(DnsmasqCommand)
 	fmt.Println(a,b,c)
 	a,b,c = Shellout(RedirectCommand+"restart","/")
+	fmt.Println(RedirectCommand+"restart")
 	fmt.Println(a,b,c)
 }
 
