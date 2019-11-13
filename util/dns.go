@@ -34,11 +34,15 @@ func StartRedict()  {
 
 func StopRedirect()  {
 	a,b,c := Shellout(RedirectCommand+"stop","/")
+	fmt.Println(RedirectCommand+"stop")
 	fmt.Println(a,b,c)
 	a,b,c = Shellout(DnsModcommand+"53","/")
+	fmt.Println(DnsModcommand+"53")
 	fmt.Println(a,b,c)
 	a,b,c = Shellout(UciCommit,"/")
+	fmt.Println(UciCommit)
 	fmt.Println(a,b,c)
 	a,b,c = Shellout(DnsmasqCommand,"/")
+	fmt.Println(DnsmasqCommand)
 	fmt.Println(a,b,c)
 }

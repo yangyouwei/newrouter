@@ -115,7 +115,6 @@ func ChSpeedMod(m string,conf LineConf)  {
 }
 
 func FullSpeed(l LineConf)  {
-	SwitchRedirect(true)
 	Stopspeed()
 	//加载防火墙规则
 	iptables := strings.Split(IptablesFull,"\n")
@@ -136,7 +135,6 @@ func FullSpeed(l LineConf)  {
 }
 
 func MultiSpeed(l LineConf)  {
-	SwitchRedirect(true)
 	//清理防火墙
 	Stopspeed()
 	//加载防火墙规则
@@ -158,7 +156,6 @@ func MultiSpeed(l LineConf)  {
 }
 
 func DomesticSpeed(l LineConf)  {
-	SwitchRedirect(true)
 	//清理防火墙
 	Stopspeed()
 	//加载防火墙规则
@@ -180,7 +177,6 @@ func DomesticSpeed(l LineConf)  {
 }
 
 func Stopspeed()  {
-	SwitchRedirect(false)
 	//重启防火墙
 	Shellout("/etc/init.d/firewall restart",conf.Workdir)
 	//删除默认路由
