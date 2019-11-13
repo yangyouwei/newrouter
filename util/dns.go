@@ -1,5 +1,7 @@
 package util
 
+import "fmt"
+
 var (
 	DnsModcommand string = "/sbin/uci set dhcp.@dnsmasq[0].port="
 	UciCommit string = "/sbin/uci commit dhcp.@dnsmasq[0].port"
@@ -16,15 +18,23 @@ func SwitchRedirect(s bool)  {
 }
 
 func StartRedict()  {
-	Shellout(DnsModcommand+"0","/")
-	Shellout(UciCommit,"/")
-	Shellout(DnsmasqCommand,"/")
-	Shellout(RedirectCommand+"restart","/")
+	a,b,c := Shellout(DnsModcommand+"0","/")
+	fmt.Println(a,b,c)
+	a,b,c = Shellout(UciCommit,"/")
+	fmt.Println(a,b,c)
+	a,b,c = Shellout(DnsmasqCommand,"/")
+	fmt.Println(a,b,c)
+	a,b,c = Shellout(RedirectCommand+"restart","/")
+	fmt.Println(a,b,c)
 }
 
 func StopRedirect()  {
-	Shellout(RedirectCommand+"stop","/")
-	Shellout(DnsModcommand+"53","/")
-	Shellout(UciCommit,"/")
-	Shellout(DnsmasqCommand,"/")
+	a,b,c := Shellout(RedirectCommand+"stop","/")
+	fmt.Println(a,b,c)
+	a,b,c = Shellout(DnsModcommand+"53","/")
+	fmt.Println(a,b,c)
+	a,b,c = Shellout(UciCommit,"/")
+	fmt.Println(a,b,c)
+	a,b,c = Shellout(DnsmasqCommand,"/")
+	fmt.Println(a,b,c)
 }
