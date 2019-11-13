@@ -12,8 +12,10 @@ var (
 func SwitchRedirect(s bool)  {
 	if s {
 		StartRedict()
+		return
 	}else {
 		StopRedirect()
+		return
 	}
 }
 

@@ -26,20 +26,20 @@ func init()  {
 		util.SwitchRedirect(true)
 		//加载防火墙
 		fmt.Println("loading iptables")
-		util.ChSpeedMod("fullspeed",util.Port)
+		util.ChSpeedMod("fullspeed")
 	case speedmode == "foreigen":
 		fmt.Println("mode is foreigen")
 		util.SwitchRedirect(true)
 		//加载防火墙
 		fmt.Println("loading iptables")
-		util.ChSpeedMod("domsticspeed",util.Port)
+		util.ChSpeedMod("domsticspeed")
 	case speedmode == "multicontry":
 		fmt.Println("mode is multicontry")
 		//停止dnsmasq
 		util.SwitchRedirect(true)
 		//加载防火墙
 		fmt.Println("loading iptables")
-		util.ChSpeedMod("multispeed",util.Port)
+		util.ChSpeedMod("multispeed")
 	case speedmode == "stopspeed":
 		fmt.Println("mode is stopspeed")
 		//清空防火墙

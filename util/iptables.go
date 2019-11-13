@@ -1,7 +1,6 @@
 package util
 
 import (
-	"fmt"
 	"github.com/yangyouwei/newrouter/conf"
 	"github.com/yangyouwei/newrouter/models"
 	"strings"
@@ -16,7 +15,6 @@ var Port LineConf
 
 func init()  {
 	Port.getpoart()
-	fmt.Println(Port)
 }
 
 var IptablesFull string = `/usr/sbin/ip rule add fwmark 0x01/0x01 table 100
@@ -101,20 +99,20 @@ func (p *LineConf)getpoart()  {
 	p.UDPPort = "8001"
 }
 
-func ChSpeedMod(m string,conf LineConf)  {
-	switch  {
-	case m == "fullspeed":
-		FullSpeed(conf)
-	case m == "multispeed":
-		MultiSpeed(conf)
-	case m == "domsticspeed":
-		DomesticSpeed(conf)
+func ChSpeedMod(m string)  {
+	switch  m{
+	case "fullspeed":
+		FullSpeed()
+	case "multispeed":
+		MultiSpeed()
+	case "domsticspeed":
+		DomesticSpeed()
 	default:
 		Stopspeed()
 	}
 }
 
-func FullSpeed(l LineConf)  {
+func FullSpeed()  {
 	Stopspeed()
 	//加载防火墙规则
 	iptables := strings.Split(IptablesFull,"\n")
@@ -134,7 +132,7 @@ func FullSpeed(l LineConf)  {
 	}
 }
 
-func MultiSpeed(l LineConf)  {
+func MultiSpeed()  {
 	//清理防火墙
 	Stopspeed()
 	//加载防火墙规则
@@ -155,7 +153,7 @@ func MultiSpeed(l LineConf)  {
 	}
 }
 
-func DomesticSpeed(l LineConf)  {
+func DomesticSpeed()  {
 	//清理防火墙
 	Stopspeed()
 	//加载防火墙规则
