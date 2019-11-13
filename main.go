@@ -68,7 +68,7 @@ func main()  {
 	s.HandleFunc("/modline", api.ModLineconf)
 	s.HandleFunc("/speedmod", api.SpeedMod)
 	s.HandleFunc("/applayline", api.AppalyLine)
-	fmt.Println("server is listening on 127.0.0.1 "+serverport)
+	fmt.Println("server is listening on 127.0.0.1:"+serverport)
 	http.ListenAndServe(":"+serverport, r)
 }
 

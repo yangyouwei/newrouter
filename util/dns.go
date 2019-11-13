@@ -1,9 +1,9 @@
 package util
 
 var (
-	DnsModcommand string = "uci set dhcp.@dnsmasq[0].port="
-	UciCommit string = "uci commit dhcp.@dnsmasq[0].port="
-	DnsmasqCommand string = "/etc/init.d//etc/init.d/dnsmasq restart"
+	DnsModcommand string = "/sbin/uci set dhcp.@dnsmasq[0].port="
+	UciCommit string = "/sbin/uci commit dhcp.@dnsmasq[0].port="
+	DnsmasqCommand string = "/etc/init.d/dnsmasq restart"
 	RedirectCommand string = "/etc/init.d/redirect "
 )
 
