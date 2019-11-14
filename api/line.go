@@ -22,7 +22,10 @@ type lines struct {
 func Getlines(w http.ResponseWriter, r *http.Request)  {
 	log.Println("request domain ",r.Host,"URL: ",r.URL)
 	//读取配置文件
-	l := util.ReadAlLFromFile(conf.LinesConfig)
+	l,err1 := util.ReadAlLFromFile(conf.LinesConfig)
+	if err1 != nil{
+		 fmt.Println(err1)
+	}
 	strline := lines{}
 	err := json.Unmarshal([]byte(l),&strline)
 	if err != nil {

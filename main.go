@@ -15,27 +15,27 @@ import (
 var system models.Sysstr
 
 func init()  {
-	//判断加速模式。如果是不加速，直接退出
 	system.GetSYSTEM()
+	util.InitIpset(&system)
 	speedmode := system.SpeedMod
-	//fmt.Println(speedmode)
 	switch {
 	case speedmode == "full":
 		fmt.Println("mode is full")
-		//停止dnsmasq
+		//启动redirect
 		util.SwitchRedirect(true)
 		//加载防火墙
 		fmt.Println("loading iptables")
 		util.ChSpeedMod("fullspeed")
 	case speedmode == "foreigen":
 		fmt.Println("mode is foreigen")
+		//启动redirect
 		util.SwitchRedirect(true)
 		//加载防火墙
 		fmt.Println("loading iptables")
 		util.ChSpeedMod("domsticspeed")
 	case speedmode == "multicontry":
 		fmt.Println("mode is multicontry")
-		//停止dnsmasq
+		//启动redirect
 		util.SwitchRedirect(true)
 		//加载防火墙
 		fmt.Println("loading iptables")
@@ -44,11 +44,13 @@ func init()  {
 		fmt.Println("mode is stopspeed")
 		//清空防火墙
 		util.Stopspeed()
+		//启动关闭加速
 		util.SwitchRedirect(false)
 	default:
 		fmt.Println("mode is stopspeed")
 		//清空防火墙
 		util.Stopspeed()
+		//启动关闭加速
 		util.SwitchRedirect(false)
 	}
 	fmt.Println("finish init")
