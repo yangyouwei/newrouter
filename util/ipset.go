@@ -18,6 +18,7 @@ var (
 
 func InitIpset(s *models.Sysstr) {
 	fmt.Println("creating ipset .")
+	fmt.Println(s)
 	//获取国家ip列表文件名称
 	cs := GetContryNames(conf.ContryIPlist)
 	if cs == nil {
@@ -73,8 +74,9 @@ func InitIpset(s *models.Sysstr) {
 
 	Shellout(IPSETforeignCMD, conf.Workdir)
 	n := 0
+	str := strings.Split(s.Foreigencontry, "\n")
 	for _, f := range cs {
-		for _, i := range s.Foreigencontry {
+		for _, i := range str {
 			if i == f {
 				//读取文件内容
 				c,err := ReadAlLFromFile(i)

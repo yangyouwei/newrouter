@@ -10,7 +10,7 @@ type Sysstr struct {
 	SpeedMod string `json:"speedmod"`
 	GetchontryUrl string `json:"getcontryurl"`
 	GetLineUrl string `json:"getlineurl"`
-	Foreigencontry []string `json:"speedcontry"`
+	Foreigencontry string `json:"speedcontry"`
 }
 
 
