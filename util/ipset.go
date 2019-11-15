@@ -47,17 +47,19 @@ func InitIpset(s *models.Sysstr) {
 		fmt.Println(err)
 	}
 	IP := strings.Split(ips, "\n")
+	var tmpstr string
 	for _, i := range IP {
 		//创建临时文件
-		linefile, err := os.OpenFile(Tmpdir + s.Contry, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0644)
-		if err != nil {
-			fmt.Println(err)
-		}
-		i = "add domestic " + i
-		linefile.Write([]byte(i))
+		tmpstr = "add domestic " + i + "\n"
 		//ipset restore
 		Shellout(IpsetAdd + Tmpdir + s.Contry, conf.Workdir)
 	}
+
+	linefile, err := os.OpenFile(Tmpdir + s.Contry, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0644)
+	if err != nil {
+		fmt.Println(err)
+	}
+	linefile.Write([]byte(tmpstr))
 	//create ipset
 	Shellout(IPSETdomesicCMD, conf.Workdir)
 	//restore ipset
@@ -75,9 +77,11 @@ func InitIpset(s *models.Sysstr) {
 	Shellout(IPSETforeignCMD, conf.Workdir)
 	n := 0
 	str := strings.Split(s.Foreigencontry, "\n")
+	var tmpipstr string
 	for _, f := range cs {
 		for _, i := range str {
 			if i == f {
+				n++
 				//读取文件内容
 				c,err := ReadAlLFromFile(i)
 				if err != nil {
@@ -86,21 +90,21 @@ func InitIpset(s *models.Sysstr) {
 				}
 				IPs := strings.Split(c, "\n")
 				for _, onecontry := range IPs {
-					linefile, err := os.OpenFile(Tmpdir  + "foreigen", os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0644)
-					if err != nil {
-						fmt.Println(err)
-					}
-					onecontry := "add foreign " + onecontry
-					linefile.Write([]byte(onecontry))
-					n++
+					tmpipstr = "add foreign " + onecontry + "\n"
 				}
-			}else {
-				continue
 			}
 		}
 	}
+
+	fmt.Println("n = ", n)
 	if n > 0 {
 		//ipset restore
+		linefile, err := os.OpenFile(Tmpdir  + "foreigen", os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0644)
+		if err != nil {
+			fmt.Println(err)
+		}
+		linefile.Write([]byte(tmpipstr))
+
 		Shellout(IpsetAdd + Tmpdir + "foreign",conf.Workdir)
 		//删除临时文件
 		Delfile(Tmpdir+ "foreigen")
