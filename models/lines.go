@@ -2,8 +2,10 @@ package models
 
 import (
 	"bufio"
+	"fmt"
 	"github.com/yangyouwei/newrouter/conf"
 	"github.com/yangyouwei/newrouter/db"
+	"github.com/yangyouwei/newrouter/util"
 	"io"
 	"log"
 	"os"
@@ -90,5 +92,58 @@ func (l *Line)GetUseLine() {
 			ip := strings.Replace(ipaddport[1], "\n", "", -1)
 			l.Ipaddr = ip
 		}
+	}
+}
+
+func ReloadIptables(s string)  {
+	switch {
+	case s == "full":
+		fmt.Println("mode is full")
+		//启动redirect
+		if util.SpeedModInit.Full {
+			util.SwitchRedirect(true)
+			//加载防火墙
+			fmt.Println("loading iptables")
+			util.ChSpeedMod("fullspeed")
+		}else {
+			return
+		}
+
+	case s == "foreigen":
+		fmt.Println("mode is foreigen")
+		//启动redirect
+		if util.SpeedModInit.OnlyForeigen {
+			util.SwitchRedirect(true)
+			//加载防火墙
+			fmt.Println("loading iptables")
+			util.ChSpeedMod("domsticspeed")
+		}else {
+			return
+		}
+
+	case s == "multicontry":
+		fmt.Println("mode is multicontry")
+		//启动redirect
+		if util.SpeedModInit.DesignatedCountry {
+			util.SwitchRedirect(true)
+			//加载防火墙
+			fmt.Println("loading iptables")
+			util.ChSpeedMod("multispeed")
+		}else {
+			return
+		}
+
+	case s == "stopspeed":
+		fmt.Println("mode is stopspeed")
+		//清空防火墙
+		util.Stopspeed()
+		//启动关闭加速
+		util.SwitchRedirect(false)
+	default:
+		fmt.Println("mode is stopspeed")
+		//清空防火墙
+		util.Stopspeed()
+		//启动关闭加速
+		util.SwitchRedirect(false)
 	}
 }

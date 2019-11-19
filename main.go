@@ -12,52 +12,17 @@ import (
 	"net/http"
 )
 
-var system models.Sysstr
+var System models.Sysstr
 
 func init()  {
-	system.GetSYSTEM()
-	util.InitIpset(&system)
-	speedmode := system.SpeedMod
-	switch {
-	case speedmode == "full":
-		fmt.Println("mode is full")
-		//启动redirect
-		util.SwitchRedirect(true)
-		//加载防火墙
-		fmt.Println("loading iptables")
-		util.ChSpeedMod("fullspeed")
-	case speedmode == "foreigen":
-		fmt.Println("mode is foreigen")
-		//启动redirect
-		util.SwitchRedirect(true)
-		//加载防火墙
-		fmt.Println("loading iptables")
-		util.ChSpeedMod("domsticspeed")
-	case speedmode == "multicontry":
-		fmt.Println("mode is multicontry")
-		//启动redirect
-		util.SwitchRedirect(true)
-		//加载防火墙
-		fmt.Println("loading iptables")
-		util.ChSpeedMod("multispeed")
-	case speedmode == "stopspeed":
-		fmt.Println("mode is stopspeed")
-		//清空防火墙
-		util.Stopspeed()
-		//启动关闭加速
-		util.SwitchRedirect(false)
-	default:
-		fmt.Println("mode is stopspeed")
-		//清空防火墙
-		util.Stopspeed()
-		//启动关闭加速
-		util.SwitchRedirect(false)
-	}
+	System.GetSYSTEM()
+	util.RstoreIpset(&System)
+	util.SpeedCtl(System.SpeedMod)
 	fmt.Println("finish init")
 }
 
 func main()  {
-	var serverport string = "3000"
+	var serverport string = "80"
 
 	r := mux.NewRouter()
 	r.HandleFunc("/", web).Name("index")
@@ -70,6 +35,24 @@ func main()  {
 	s.HandleFunc("/modline", api.ModLineconf)
 	s.HandleFunc("/speedmod", api.SpeedMod)
 	s.HandleFunc("/applayline", api.AppalyLine)
+
+	sys := r.PathPrefix("/sys").Subrouter()
+	sys.HandleFunc("/waninfo", api.GetWanInfo)
+	sys.HandleFunc("/restart", api.Rebootsys)
+
+	wifi := r.PathPrefix("/wifi").Subrouter()
+	wifi.HandleFunc("/ssid", api.GetWifiInfo)
+	wifi.HandleFunc("/setwifi", api.SetWifi)
+	wifi.HandleFunc("/restartwifi", api.RestartWifi)
+
+	blacklist := r.PathPrefix("/blacklist").Subrouter()
+	blacklist.HandleFunc("/getblack", api.GetBlacklist)
+	blacklist.HandleFunc("/setblack", api.SetBlacklist)
+
+	userhosts := r.PathPrefix("/hosts").Subrouter()
+	userhosts.HandleFunc("/gethosts", api.GetHosts)
+	userhosts.HandleFunc("/sethosts", api.SetHosts)
+
 	fmt.Println("server is listening on 127.0.0.1:"+serverport)
 	http.ListenAndServe(":"+serverport, r)
 }

@@ -7,5 +7,6 @@ var (
 	RDIRCONF string = "/webserver/redirect/config.ini"
 	SQLITE3 string = "/webserver/mana/sqlite3.db"
 	ContryIPlist string = "/webserver/redirect/ipdir/"
+	IpsetFfile string = "/webserver/mana/ipset/"
 )
 

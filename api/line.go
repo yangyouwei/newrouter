@@ -48,8 +48,8 @@ func AppalyLine(w http.ResponseWriter, r *http.Request)  {
 }
 
 func SpeedMod(w http.ResponseWriter, r *http.Request)  {
-	//全局
-	//仅加速国外
-	//仅加速指定国家
-	//停止加速
+	//updata sys
+	//mod switch
+	//切换mod
+
 }
